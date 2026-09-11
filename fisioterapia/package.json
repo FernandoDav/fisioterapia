@@ -1,0 +1,14 @@
+{
+  "name": "fisio-clinica",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sistema local de gestion para una clinica de fisioterapia",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}

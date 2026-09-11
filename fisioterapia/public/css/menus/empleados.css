@@ -1,0 +1,148 @@
+@import url("../style.css");
+.table-panel {
+  overflow: auto;
+}
+table {
+  min-width: 650px;
+}
+.permissions-box {
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #f8faf8;
+}
+.permissions-box > strong,
+.permissions-box > small {
+  display: block;
+}
+.permissions-box > small {
+  margin: 5px 0 12px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.permission-row {
+  display: grid;
+  grid-template-columns: 1fr 80px 105px;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding: 9px 0;
+  font-size: 11px;
+}
+.permission-row label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 500;
+}
+.permission-row input {
+  display: inline-block;
+  width: auto;
+  margin: 0 5px 0 0;
+}
+.table-action {
+  padding: 5px 0;
+  border: 0;
+  background: transparent;
+  color: var(--teal);
+  font-size: 11px;
+  font-weight: 700;
+}
+.table-action:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+.suspend-action,
+.delete-user {
+  color: #b66a59;
+}
+.reactivate-action {
+  color: var(--teal);
+}
+.suspended-status {
+  background: #fff0e9;
+  color: #bd554d;
+}
+/* Mejoras para formulario de empleados */
+.employee-form-section {
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--line);
+}
+
+.employee-form-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.employee-form-section h4 {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--teal);
+}
+
+.employee-form-section small {
+  display: block;
+  color: var(--muted);
+  font-size: 11px;
+  margin-bottom: 16px;
+  line-height: 1.4;
+}
+
+/* Estilos para tabla mejorada */
+table td small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  margin-top: 2px;
+}
+
+/* Mejoras para permisos */
+.permission-row {
+  display: grid;
+  grid-template-columns: 120px auto auto;
+  gap: 10px;
+  align-items: center;
+  border-top: 1px solid var(--line);
+  padding: 12px 0;
+  font-size: 12px;
+}
+
+.permission-row span {
+  font-weight: 600;
+  color: var(--ink-2);
+}
+
+.permission-row label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.permission-row input[type="checkbox"] {
+  margin: 0;
+  width: 14px;
+  height: 14px;
+}
+
+/* Estilos para campos monetarios */
+input[type="number"] {
+  font-family: monospace;
+}
+
+/* Responsive para tabla */
+@media (max-width: 900px) {
+  .permission-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .permission-row span {
+    font-weight: 700;
+  }
+}

@@ -1,0 +1,209 @@
+@import url("../style.css");
+table {
+  min-width: 760px;
+}
+td small {
+  display: block;
+  color: var(--muted);
+  margin-top: 4px;
+}
+.table-panel {
+  overflow: auto;
+}
+.patient-details {
+  margin-top: 8px;
+  min-width: 700px;
+}
+.patient-details summary {
+  color: var(--teal);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 700;
+}
+.patient-file {
+  margin-top: 14px;
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: #f8faf8;
+  color: var(--ink-2);
+}
+.patient-data {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.patient-data span,
+.patient-data strong {
+  display: block;
+}
+.patient-data span,
+.history-columns h4 {
+  color: var(--muted);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.patient-data strong {
+  margin-top: 4px;
+  font-size: 11px;
+}
+.medical-history {
+  grid-column: 1 / -1;
+}
+.history-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 18px;
+  border-top: 1px solid var(--line);
+  padding-top: 12px;
+}
+.history-columns h4 {
+  margin: 0 0 8px;
+}
+.history-item {
+  margin-top: 7px;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--teal);
+  border-radius: 5px;
+  background: #fff;
+  font-size: 11px;
+}
+.history-item strong,
+.history-item span,
+.history-item b {
+  display: block;
+}
+.history-item span {
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.history-item b {
+  margin-top: 5px;
+  font-size: 10px;
+}
+.invoice-paid { border-left-color: #3c9b72; }
+.invoice-paid b { color: #3c9b72; }
+.invoice-pending { border-left-color: #d39b42; }
+.invoice-pending b { color: #b17b21; }
+.invoice-unpaid { border-left-color: #bd554d; }
+.invoice-unpaid b { color: #bd554d; }
+.history-empty {
+  color: var(--muted);
+  font-size: 11px;
+}
+textarea {
+  display: block;
+  width: 100%;
+  resize: vertical;
+  border: 1px solid var(--line);
+  background: #fff;
+  border-radius: 7px;
+  padding: 13px 14px;
+  margin-top: 8px;
+  color: var(--ink);
+}
+@media (max-width: 700px) {
+  .patient-data,
+  .history-columns {
+    grid-template-columns: 1fr;
+  }
+  .patient-details {
+    min-width: 0;
+  }
+}
+/* Mejoras visuales para formulario de pacientes */
+.form-grid select[multiple] {
+  min-height: 100px;
+  padding: 8px;
+}
+
+.form-grid option {
+  padding: 4px 8px;
+}
+
+.form-grid option:checked {
+  background-color: var(--mint);
+  color: var(--ink);
+}
+
+.patient-data {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.patient-data div.wide {
+  grid-column: 1 / -1;
+}
+
+.patient-data strong {
+  word-break: break-word;
+  line-height: 1.4;
+}
+
+/* Estilos para etiquetas de campo */
+.patient-data span {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+  display: block;
+}
+
+/* Mejora para selects múltiples con scroll */
+select[multiple]::-webkit-scrollbar {
+  width: 8px;
+}
+
+select[multiple]::-webkit-scrollbar-track {
+  background: var(--cream);
+  border-radius: 4px;
+}
+
+select[multiple]::-webkit-scrollbar-thumb {
+  background: var(--line);
+  border-radius: 4px;
+}
+
+select[multiple]::-webkit-scrollbar-thumb:hover {
+  background: var(--muted);
+}
+
+/* Mejoras para textareas */
+textarea {
+  min-height: 80px;
+  font-family: inherit;
+  line-height: 1.4;
+}
+
+/* Badge para antecedentes médicos */
+.medical-background-badge {
+  display: inline-block;
+  background-color: var(--mint);
+  color: var(--teal);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  margin: 2px;
+  font-weight: 600;
+}
+
+/* Separador de secciones */
+.patient-section {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+}
+
+.patient-section h4 {
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+}

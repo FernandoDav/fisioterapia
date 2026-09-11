@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fisio Clinica | Gestion integral</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div id="loginView" class="login-layout">
+    <section class="login-art"><div class="brand-mark">F<span>/</span></div><p class="eyebrow">CLINICA DE FISIOTERAPIA</p><h1>Movimiento que<br><em>transforma.</em></h1><p class="login-copy">Una mirada clara a cada paciente, cada sesion y cada avance.</p><div class="art-stats"><strong>+12</strong><span>anos cuidando<br>el movimiento</span></div></section>
+    <section class="login-panel"><div class="login-box"><div class="mobile-brand">F<span>/</span> FISIO CLINICA</div><p class="eyebrow">BIENVENIDO DE VUELTA</p><h2>Inicia tu jornada</h2><p class="muted">Accede a tu espacio de trabajo.</p><form id="loginForm"><label>Correo electronico<input type="email" id="email" value="admin@fisio.local" required></label><label>Contrasena<div class="password-input"><input type="password" id="password" value="admin123" required><button type="button" id="togglePassword" aria-label="Mostrar contrasena">◉</button></div></label><button class="primary-button full" type="submit">Entrar al sistema <span>→</span></button><p id="loginError" class="error"></p></form><p class="demo-hint">Demo: admin@fisio.local / admin123</p></div><footer>Fisio Clinica <span>•</span> Gestion local segura</footer></section>
+  </div>
+  <div id="appView" class="app-shell hidden">
+    <aside class="sidebar"><div class="sidebar-brand"><div class="brand-mark small">F<span>/</span></div><strong>FISIO<br>CLINICA</strong></div><div class="clinic-label">ESPACIO DE TRABAJO</div><nav id="mainNav"><button class="nav-item active" data-view="dashboard"><span>⌂</span> Inicio</button><button class="nav-item" data-view="patients"><span>♙</span> Pacientes</button><button class="nav-item" data-view="invoices"><span>▣</span> Facturacion</button><button class="nav-item" data-view="calendar"><span>▦</span> Agenda</button><button class="nav-item" data-view="analytics"><span>◒</span> Estadisticas</button><button class="nav-item" data-view="employees" data-admin-only><span>♧</span> Empleados</button><button class="nav-item" data-view="payments"><span>◌</span> Pagos equipo</button><button class="nav-item" data-view="notes"><span>♧</span> Recordatorios</button><button class="nav-item" data-view="calculator"><span>＋</span> Calculadora</button></nav><div class="sidebar-bottom"><div class="support-box"><span>?</span><div><strong>Centro de ayuda</strong><small>Estamos para ayudarte</small></div></div><button id="logoutButton" class="logout">↪ Cerrar sesion</button></div></aside>
+    <main class="main-content"><header class="topbar"><button id="menuToggle" class="icon-button mobile-only">☰</button><div><p class="eyebrow" id="pageKicker">RESUMEN GENERAL</p><h1 id="pageTitle">Buenos dias, Mariana</h1></div><div class="top-actions"><button class="notification-button" id="notificationButton" aria-label="Recordatorios"><span>♧</span><b id="notificationCount">2</b></button><div class="user-chip"><div class="avatar" id="userAvatar">MT</div><div><strong id="userName">Mariana Torres</strong><small id="userRole">Administradora</small></div><span>⌄</span></div></div></header><div id="content" class="content-area"></div></main>
+  </div>
+  <div id="toast" class="toast"></div><script src="js/app.js"></script>
+</body>
+</html>

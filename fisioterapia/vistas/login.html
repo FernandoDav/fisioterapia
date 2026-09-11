@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Acceso | Fisio Clinica</title>
+    <link rel="stylesheet" href="../public/css/style.css" />
+    <link rel="stylesheet" href="../public/css/menus/login.css" />
+  </head>
+  <body>
+    <main class="login-layout">
+      <section class="login-art">
+        <img
+          class="login-logo"
+          src="../public/css/imagenes/IMG_3630.PNG"
+          alt="Faz Castillo Fisioterapia"
+        />
+        <p class="eyebrow">CLINICA DE FISIOTERAPIA</p>
+        <h1>Movimiento que<br /><em>transforma.</em></h1>
+      </section>
+      <section class="login-panel">
+        <img
+          class="mobile-login-logo"
+          src="../public/css/imagenes/IMG_3629.PNG"
+          alt="Faz Castillo Fisioterapia"
+        />
+        <div class="login-box">
+          <p class="eyebrow">BIENVENIDO DE VUELTA</p>
+          <h2>Inicia tu jornada</h2>
+          <p class="muted">Accede a tu espacio de trabajo.</p>
+          <form id="loginForm">
+            <label
+              >Correo electronico<input
+                id="email"
+                type="email"
+                value="admin@fisio.local"
+                required /></label
+            ><label
+              >Contrasena<input
+                id="password"
+                type="password"
+                value="admin123"
+                required /></label
+            ><button class="primary-button full">Entrar al sistema →</button
+            ><span class="action-help login-help"
+              ><button
+                class="info-button"
+                type="button"
+                aria-label="Informacion sobre el inicio de sesion"
+              >
+                !</button
+              ><span class="action-help-message" hidden
+                >Valida tus credenciales y abre el panel correspondiente a tu
+                rol.</span
+              ></span
+            >
+            <p id="error" class="error"></p>
+          </form>
+          <small
+            >Admin: admin@fisio.local / admin123<br />Empleado:
+            empleado@fisio.local / fisio123</small
+          >
+        </div>
+      </section>
+    </main>
+    <script src="../public/js/menus/login.js"></script>
+  </body>
+</html>

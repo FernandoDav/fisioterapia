@@ -1,0 +1,26 @@
+{
+  "users": [
+    { "id": 1, "name": "Mariana Torres", "email": "admin@fisio.local", "password": "admin123", "role": "admin", "active": true, "lastLogin": null },
+    { "id": 2, "name": "Carlos Mendez", "email": "empleado@fisio.local", "password": "fisio123", "role": "empleado", "active": true, "lastLogin": null }
+  ],
+  "patients": [
+    { "id": 1, "name": "Lucia Fernandez", "phone": "555 0142", "therapy": "Rehabilitacion deportiva", "employee": "Carlos Mendez", "date": "2026-08-18", "status": "En tratamiento" },
+    { "id": 2, "name": "Diego Ramirez", "phone": "555 0198", "therapy": "Dolor lumbar", "employee": "Carlos Mendez", "date": "2026-08-20", "status": "Primera visita" },
+    { "id": 3, "name": "Sofia Castillo", "phone": "555 0116", "therapy": "Movilidad articular", "employee": "Mariana Torres", "date": "2026-08-21", "status": "En tratamiento" }
+  ],
+  "invoices": [
+    { "id": "FAC-1048", "patient": "Lucia Fernandez", "employee": "Carlos Mendez", "amount": 850, "date": "2026-08-21", "status": "Pagada" },
+    { "id": "FAC-1047", "patient": "Diego Ramirez", "employee": "Carlos Mendez", "amount": 700, "date": "2026-08-20", "status": "Pagada" },
+    { "id": "FAC-1046", "patient": "Sofia Castillo", "employee": "Mariana Torres", "amount": 900, "date": "2026-08-19", "status": "Pendiente" }
+  ],
+  "appointments": [
+    { "id": 1, "patient": "Lucia Fernandez", "employee": "Carlos Mendez", "date": "2026-08-24", "time": "09:00", "type": "Rehabilitacion" },
+    { "id": 2, "patient": "Diego Ramirez", "employee": "Carlos Mendez", "date": "2026-08-24", "time": "11:00", "type": "Valoracion" },
+    { "id": 3, "patient": "Sofia Castillo", "employee": "Mariana Torres", "date": "2026-08-25", "time": "10:00", "type": "Movilidad" }
+  ],
+  "notes": [
+    { "id": 1, "title": "Pago de renta", "date": "2026-08-30", "frequency": "Mensual", "assignee": "Admin", "done": false },
+    { "id": 2, "title": "Revisar inventario de vendas", "date": "2026-08-25", "frequency": "Unica", "assignee": "Todos", "done": false }
+  ],
+  "loginLogs": []
+}

@@ -1,0 +1,46 @@
+@import url("../style.css");
+.kpi i {
+  font-size: 11px;
+  color: var(--teal);
+  font-style: normal;
+}
+.panel-title a {
+  color: var(--teal);
+  font-size: 12px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.bar-chart {
+  display: flex;
+  align-items: end;
+  gap: 14px;
+  height: 175px;
+  padding-top: 20px;
+}
+.bar-chart i {
+  display: block;
+  flex: 1;
+  background: #b8ddd4;
+  border-radius: 4px 4px 0 0;
+}
+.bar-chart i.current {
+  background: var(--teal);
+}
+.agenda-row {
+  border-bottom: 1px solid var(--line);
+  padding: 12px 0;
+  margin: 0;
+  color: var(--ink-2);
+}
+.agenda-row b {
+  color: var(--muted);
+  margin-right: 14px;
+}
+.agenda-row small {
+  display: block;
+  color: var(--muted);
+  margin: 4px 0 0 55px;
+}
+.empty {
+  color: var(--muted);
+}

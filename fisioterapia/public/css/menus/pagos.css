@@ -1,0 +1,38 @@
+@import url("../style.css");
+.table-panel {
+  overflow: auto;
+}
+table {
+  min-width: 680px;
+}
+.payment-filters {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.payment-filters label {
+  min-width: 170px;
+  margin: 0;
+  font-size: 11px;
+}
+.payment-filters .primary-button {
+  min-height: 45px;
+}
+td small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+@media (max-width: 700px) {
+  .payment-filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .payment-filters label,
+  .payment-filters .primary-button {
+    width: 100%;
+  }
+}

@@ -1,0 +1,29 @@
+@import url("../style.css");
+.note {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+.note > span {
+  font-size: 22px;
+  color: var(--coral);
+}
+.note div {
+  flex: 1;
+}
+.note strong,
+.note small {
+  display: block;
+}
+.note small {
+  color: var(--muted);
+  margin-top: 5px;
+}
+.note.done {
+  opacity: 0.58;
+}
+.note.done strong {
+  text-decoration: line-through;
+}

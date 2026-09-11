@@ -1,0 +1,108 @@
+@import url("../style.css");
+.table-panel {
+  overflow: auto;
+}
+table {
+  min-width: 760px;
+}
+.panel-title select {
+  padding: 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--ink);
+}
+.invoice-modal {
+  width: min(720px, 100%);
+}
+.invoice-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.invoice-modal input[type="number"] {
+  appearance: textfield;
+}
+.invoice-modal .panel-title p {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+.currency-preview {
+  padding: 15px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--mint);
+  color: var(--ink-2);
+}
+.rate-button {
+  display: block;
+  margin-top: 8px;
+  padding: 7px 10px;
+  border: 1px solid var(--teal);
+  border-radius: 5px;
+  background: var(--mint);
+  color: var(--ink-2);
+  font-size: 10px;
+  font-weight: 700;
+}
+.invoice-modal label > small {
+  display: block;
+  margin-top: 5px;
+}
+.currency-preview > strong,
+.currency-preview > small {
+  display: block;
+}
+.currency-preview > div {
+  display: flex;
+  gap: 24px;
+  margin: 12px 0 8px;
+}
+.currency-preview span {
+  font-size: 11px;
+}
+.currency-preview b {
+  display: block;
+  margin-top: 3px;
+  color: var(--teal);
+  font: 800 18px Manrope;
+}
+.currency-preview small,
+.invoice-modal label small {
+  color: var(--muted);
+  font-size: 10px;
+}
+.hidden-field {
+  display: none;
+}
+.hidden-field.visible-field {
+  display: block;
+}
+.paid-status {
+  background: #e4f2ed;
+}
+td small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 10px;
+}
+.table-action {
+  padding: 6px 0;
+  border: 0;
+  background: transparent;
+  color: var(--teal);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.table-action:hover {
+  color: var(--ink);
+  text-decoration: underline;
+}
+@media (max-width: 600px) {
+  .currency-preview > div {
+    justify-content: space-between;
+    gap: 12px;
+  }
+}
