@@ -44,3 +44,39 @@
 .empty {
   color: var(--muted);
 }
+.reset-panel {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+.reset-panel h3 {
+  margin: 0 0 8px;
+}
+.reset-panel p,
+.reset-panel small {
+  color: var(--muted);
+  line-height: 1.6;
+}
+.reset-panel p {
+  margin: 0;
+  max-width: 900px;
+}
+.reset-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.danger-button {
+  padding: 12px 16px;
+  border-radius: 6px;
+  background: #a93636;
+  color: #fff;
+  font-weight: 700;
+}
+.danger-button:hover:not(:disabled) {
+  background: #812727;
+}
+.danger-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}

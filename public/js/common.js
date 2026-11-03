@@ -120,16 +120,16 @@ const seed = {
 const db = JSON.parse(
   localStorage.getItem("fisioData") || JSON.stringify(seed),
 );
-db.patients = (db.patients && db.patients.length) ? db.patients : (seed.patients || []);
-db.invoices = (db.invoices && db.invoices.length) ? db.invoices : (seed.invoices || []);
-db.appointments = (db.appointments && db.appointments.length) ? db.appointments : (seed.appointments || []);
-db.notes = (db.notes && db.notes.length) ? db.notes : (seed.notes || []);
-db.employees = (db.employees && db.employees.length) ? db.employees : (seed.employees || []);
-db.services = (db.services && db.services.length) ? db.services : (seed.services || []);
-db.users = (db.users && db.users.length) ? db.users : (seed.users || []);
-db.auditLog = db.auditLog || [];
-db.expenses = db.expenses || [];
-db.payrollPayments = db.payrollPayments || [];
+db.patients = Array.isArray(db.patients) ? db.patients : (seed.patients || []);
+db.invoices = Array.isArray(db.invoices) ? db.invoices : (seed.invoices || []);
+db.appointments = Array.isArray(db.appointments) ? db.appointments : (seed.appointments || []);
+db.notes = Array.isArray(db.notes) ? db.notes : (seed.notes || []);
+db.employees = Array.isArray(db.employees) ? db.employees : (seed.employees || []);
+db.services = Array.isArray(db.services) ? db.services : (seed.services || []);
+db.users = Array.isArray(db.users) ? db.users : (seed.users || []);
+db.auditLog = Array.isArray(db.auditLog) ? db.auditLog : [];
+db.expenses = Array.isArray(db.expenses) ? db.expenses : [];
+db.payrollPayments = Array.isArray(db.payrollPayments) ? db.payrollPayments : [];
 if (
   db.users.some(
     (user) =>
@@ -152,12 +152,13 @@ function printReport(title, subtitle, sections) {
   const reportWindow = window.open("", "_blank", "width=900,height=700");
   if (!reportWindow) {
     alert("Permite las ventanas emergentes para generar el PDF.");
-    return;
+    return false;
   }
   reportWindow.document.write(
-    `<!doctype html><html lang="es"><head><meta charset="UTF-8"><title>${title}</title><style>body{font-family:Arial,sans-serif;color:#075b9d;padding:36px}header{display:flex;align-items:center;gap:16px;border-bottom:2px solid #13bfc2;padding-bottom:16px;margin-bottom:24px}header img{width:86px;height:86px;object-fit:contain}h1{margin:0 0 5px}h2{color:#126c9f;border-bottom:1px solid #cfe9ec;padding-bottom:6px}p,td,th{font-size:12px}table{width:100%;border-collapse:collapse;margin:12px 0 24px}td,th{border-bottom:1px solid #dbeaec;padding:9px;text-align:left}th{background:#dff8f7;color:#075b9d}.report-meta{color:#668894;margin-bottom:25px}.total{font-size:18px;font-weight:bold;color:#075b9d}</style></head><body><header><img src="${new URL("../public/css/imagenes/IMG_3629.PNG", window.location.href).href}" alt="Faz Castillo Fisioterapia"><div><h1>${title}</h1><p class="report-meta">${subtitle}</p></div></header>${sections.join("")}<script>window.onload=()=>{window.print()}<\/script></body></html>`,
+    `<!doctype html><html lang="es"><head><meta charset="UTF-8"><title>${title}</title><style>body{font-family:Arial,sans-serif;color:#075b9d;padding:36px}header{display:flex;align-items:center;gap:16px;border-bottom:2px solid #13bfc2;padding-bottom:16px;margin-bottom:24px}header img{width:86px;height:86px;object-fit:contain}h1{margin:0 0 5px}h2{color:#126c9f;border-bottom:1px solid #cfe9ec;padding-bottom:6px}p,td,th{font-size:12px}table{width:100%;border-collapse:collapse;margin:12px 0 24px}td,th{border-bottom:1px solid #dbeaec;padding:9px;text-align:left}th{background:#dff8f7;color:#075b9d}.report-meta{color:#668894;margin-bottom:25px}.total{font-size:18px;font-weight:bold;color:#075b9d}.backup-json{white-space:pre-wrap;overflow-wrap:anywhere;font-size:9px;color:#243b53}.backup-section{break-inside:avoid-page}</style></head><body><header><img src="${new URL("../public/css/imagenes/IMG_3629.PNG", window.location.href).href}" alt="Faz Castillo Fisioterapia"><div><h1>${title}</h1><p class="report-meta">${subtitle}</p></div></header>${sections.join("")}<script>window.onload=()=>{window.print()}<\/script></body></html>`,
   );
   reportWindow.document.close();
+  return true;
 }
 function initials(name) {
   return name
