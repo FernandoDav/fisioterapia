@@ -1,42 +1,35 @@
-const express = require("express");
-const path = require("path");
-
-const app = express();
-const port = process.env.PORT || 3000;
-const root = __dirname;
-
-app.use(express.static(root));
-app.get("/", (request, response) => response.sendFile(path.join(root, "vistas", "login.html")));
-app.get("/login", (request, response) => response.sendFile(path.join(root, "vistas", "login.html")));
-app.listen(port, () => console.log(`Fisio Clinica disponible en http://localhost:${port}`));
-
 const express = require('express');
 const path = require('path');
+const routes = require('./routes/routes');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
-// Servir los directorios estáticos definidos en la arquitectura
+// Middleware para decodificar cuerpos de peticiones
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Servir carpetas estáticas requeridas por la arquitectura
 app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/vistas', express.static(path.join(__dirname, 'vistas')));
 
-// Redireccionamiento principal requerido por la documentación técnica
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'vistas', 'login.html'));
-});
+// Cargar rutas de la aplicación (incluyendo redirecciones de menús y /)
+app.use(routes);
 
-// Redireccionamiento explícito para el login
-app.get('/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'vistas', 'login.html'));
-});
+// Servir archivos estáticos del directorio raíz
+app.use(express.static(path.join(__dirname)));
 
-// Opcional: Manejo de rutas no encontradas para redirigir al login por seguridad/comodidad
+// Manejo de cualquier ruta no encontrada -> redirigir al login
 app.get('*', (req, res) => {
-    res.redirect('/');
+  res.redirect('/vistas/login.html');
 });
 
-// Arranque del servidor
-app.listen(PORT, () => {
-    console.log(`Servidor de Fisio Clinica iniciado.`);
+// Arrancar servidor si se ejecuta directamente
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Fisio Clinica iniciado con éxito.`);
     console.log(`Accede a la aplicación en: http://localhost:${PORT}`);
-});
+  });
+}
+
+module.exports = app;

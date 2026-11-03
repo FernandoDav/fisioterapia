@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "outputDirectory": ".",
+  "cleanUrls": false,
+  "trailingSlash": false,
+  "redirects": [
+    { "source": "/", "destination": "/vistas/login.html", "permanent": false },
+    { "source": "/login", "destination": "/vistas/login.html", "permanent": false },
+    { "source": "/login.html", "destination": "/vistas/login.html", "permanent": false },
+    { "source": "/inicio", "destination": "/vistas/inicio.html", "permanent": false },
+    { "source": "/inicio.html", "destination": "/vistas/inicio.html", "permanent": false },
+    { "source": "/pacientes", "destination": "/vistas/pacientes.html", "permanent": false },
+    { "source": "/pacientes.html", "destination": "/vistas/pacientes.html", "permanent": false },
+    { "source": "/facturacion", "destination": "/vistas/facturacion.html", "permanent": false },
+    { "source": "/facturacion.html", "destination": "/vistas/facturacion.html", "permanent": false },
+    { "source": "/agenda", "destination": "/vistas/agenda.html", "permanent": false },
+    { "source": "/agenda.html", "destination": "/vistas/agenda.html", "permanent": false },
+    { "source": "/estadisticas", "destination": "/vistas/estadisticas.html", "permanent": false },
+    { "source": "/estadisticas.html", "destination": "/vistas/estadisticas.html", "permanent": false },
+    { "source": "/empleados", "destination": "/vistas/empleados.html", "permanent": false },
+    { "source": "/empleados.html", "destination": "/vistas/empleados.html", "permanent": false },
+    { "source": "/pagos", "destination": "/vistas/pagos.html", "permanent": false },
+    { "source": "/pagos.html", "destination": "/vistas/pagos.html", "permanent": false },
+    { "source": "/recordatorios", "destination": "/vistas/recordatorios.html", "permanent": false },
+    { "source": "/recordatorios.html", "destination": "/vistas/recordatorios.html", "permanent": false },
+    { "source": "/calculadora", "destination": "/vistas/calculadora.html", "permanent": false },
+    { "source": "/calculadora.html", "destination": "/vistas/calculadora.html", "permanent": false },
+    { "source": "/historial", "destination": "/vistas/historial.html", "permanent": false },
+    { "source": "/historial.html", "destination": "/vistas/historial.html", "permanent": false },
+    { "source": "/precios", "destination": "/vistas/precios.html", "permanent": false },
+    { "source": "/precios.html", "destination": "/vistas/precios.html", "permanent": false }
+  ]
+}

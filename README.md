@@ -2,7 +2,7 @@
 
 MVP local para la gestion de una clinica de fisioterapia con roles de administrador y empleado.
 
-## Arranque
+## Arranque Local
 
 Puede abrirse directamente desde `vistas/login.html` o ejecutarse con Express:
 
@@ -13,7 +13,14 @@ npm start
 
 Después abre `http://localhost:3000`.
 
-## Menus separados
+## Despliegue en Vercel
+
+El proyecto incluye `vercel.json` listo para producción:
+- Configura `"outputDirectory": "."` para que Vercel incluya todas las vistas y archivos estáticos.
+- Redirige automáticamente la raíz `/`, `/login` y cada uno de los menús limpios (`/inicio`, `/pacientes`, `/facturacion`, `/agenda`, `/estadisticas`, `/empleados`, `/pagos`, `/recordatorios`, `/calculadora`, `/historial`, `/precios`) a su vista HTML correspondiente.
+- Mantiene resolución relativa perfecta entre todos los menús y recursos.
+
+## Menus del sistema
 
 Cada menu tiene su propio HTML, JavaScript y CSS:
 
@@ -27,6 +34,8 @@ Cada menu tiene su propio HTML, JavaScript y CSS:
 - `vistas/pagos.html` + `public/js/menus/pagos.js` + `public/css/menus/pagos.css`
 - `vistas/recordatorios.html` + `public/js/menus/recordatorios.js` + `public/css/menus/recordatorios.css`
 - `vistas/calculadora.html` + `public/js/menus/calculadora.js` + `public/css/menus/calculadora.css`
+- `vistas/historial.html` + `public/js/menus/historial.js` + `public/css/menus/historial.css`
+- `vistas/precios.html` + `public/js/menus/precios.js` + `public/css/menus/precios.css`
 
 Abre `vistas/login.html` para comenzar el recorrido completo. `public/js/common.js` contiene la navegación y la persistencia compartida mediante `localStorage`.
 

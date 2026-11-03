@@ -55,6 +55,17 @@ El modo `total` calcula el porcentaje sobre el acumulado. El modo `invoice` calc
 
 `logEvent(type, action, description, data)` elimina contraseñas del snapshot y agrega eventos a `auditLog`. No existe una acción de borrado para esos eventos.
 
-## Express
+## Express y Rutas
 
-Express solo sirve los archivos estáticos y redirige `/` y `/login` a `vistas/login.html`. La persistencia continúa siendo local del navegador; no hay API ni base de datos de servidor en esta fase.
+Express sirve los archivos estáticos y centraliza las redirecciones en `routes/routes.js`:
+- `/` y `/login` redirigen a `vistas/login.html`.
+- Rutas limpias (`/inicio`, `/pacientes`, `/facturacion`, `/agenda`, `/estadisticas`, `/empleados`, `/pagos`, `/recordatorios`, `/calculadora`, `/historial`, `/precios`) y con `.html` redirigen automáticamente a sus vistas correspondientes en `/vistas/<menu>.html`.
+- La persistencia continúa siendo local del navegador (`localStorage.fisioData`); no hay base de datos de servidor en esta fase.
+
+## Despliegue en Vercel
+
+La configuración en `vercel.json`:
+- Establece `"outputDirectory": "."` para que Vercel incluya la raíz completa del proyecto (`vistas/`, `public/`, etc.) y no solo la carpeta `public/`.
+- Configura redirecciones automáticas para todas las rutas y menús hacia sus respectivas vistas en `/vistas/`.
+- Mantiene `"cleanUrls": false` para preservar la resolución relativa nativa de enlaces entre vistas (`inicio.html`, `pacientes.html`, etc.).
+- Incluye `index.html` en la raíz y en `public/` con redirección inmediata a `/vistas/login.html`.
