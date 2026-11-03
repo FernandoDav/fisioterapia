@@ -5,7 +5,9 @@
 1. Ejecuta `npm install` una sola vez.
 2. Ejecuta `npm start`.
 3. Abre `http://localhost:3000`.
-4. Inicia sesion con un usuario activo.
+4. Inicia sesión con un usuario activo.
+
+Desde el menú de **Inicio**, cualquier usuario puede hacer clic en el botón **`📖 Manual de Uso (PDF)`** (en la cabecera o en la tarjeta destacada) para generar y descargar un documento PDF completo con todas las instrucciones de uso, funciones de botones y políticas operativas de cada menú.
 
 Usuarios demo:
 

@@ -410,6 +410,7 @@ function describeButton(button) {
     "Generar respaldo PDF": "Genera y abre una vista imprimible para guardar el respaldo completo en PDF.",
     "Borrar datos respaldados": "Reinicia los datos operativos tras haber guardado el respaldo en PDF.",
     "Generar PDF": "Descarga o imprime un reporte en formato PDF.",
+    "Manual de Uso (PDF)": "Genera y descarga la guía oficial en PDF con la explicación detallada de cada módulo del sistema.",
   };
   return descriptions[label] || null;
 }
