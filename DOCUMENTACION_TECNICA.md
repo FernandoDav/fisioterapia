@@ -22,6 +22,11 @@ La variable global `db` se hidrata desde `localStorage.fisioData` y se guarda co
 - `appointments`
 - `notes`
 - `auditLog`
+- `expenses`
+- `payrollPayments`
+- `loginLogs`
+
+Desde el inicio, una administradora puede generar un respaldo imprimible y confirmar el reinicio local. El respaldo omite contraseñas; el reinicio conserva la cuenta administradora activa y `services`, vacía las colecciones operativas y deja un evento de auditoría del reinicio. Las colecciones vacías se conservan al recargar y no se rellenan con datos de ejemplo.
 
 ## Sesion y autorizacion
 
@@ -53,7 +58,7 @@ El modo `total` calcula el porcentaje sobre el acumulado. El modo `invoice` calc
 
 ## Auditoria
 
-`logEvent(type, action, description, data)` elimina contraseñas del snapshot y agrega eventos a `auditLog`. No existe una acción de borrado para esos eventos.
+`logEvent(type, action, description, data)` elimina contraseñas del snapshot y agrega eventos a `auditLog`. El reinicio desde el inicio borra el historial anterior y conserva un único evento que registra el reinicio.
 
 ## Express y Rutas
 

@@ -44,6 +44,6 @@ Abre `vistas/login.html` para comenzar el recorrido completo. `public/js/common.
 - Administrador: `admin@fisio.local` / `admin123`
 - Empleado: `empleado@fisio.local` / `fisio123`
 
-Los datos temporales se guardan en `localStorage` con la clave `fisioData`. Para reiniciar la demo, borra los datos del sitio desde las herramientas del navegador.
+Los datos se guardan en el navegador actual mediante `localStorage` (`fisioData`). Una administradora puede reiniciarlos desde el menú **Inicio**: primero genera y guarda el respaldo como PDF y luego confirma el borrado. Se conserva la cuenta administradora activa y el catálogo de servicios; el resto de navegadores no se modifica.
 
 Consulta [`MANUAL_USUARIO.md`](MANUAL_USUARIO.md) y [`DOCUMENTACION_TECNICA.md`](DOCUMENTACION_TECNICA.md) para conocer los procesos, variables y reglas de cálculo.

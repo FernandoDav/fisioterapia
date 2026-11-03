@@ -60,4 +60,6 @@ El historial es de solo lectura. Conserva eventos incluso si se elimina un pacie
 
 ## Datos locales
 
-La aplicación usa `localStorage` con la clave `fisioData`. Para reiniciar la demo, elimina esa clave desde las herramientas del navegador.
+La aplicación guarda sus datos en el navegador actual con la clave `fisioData`; el reinicio no afecta otros navegadores o dispositivos.
+
+Desde el inicio, una administradora puede generar un respaldo imprimible y elegir **Guardar como PDF**. Después de guardar el archivo, puede confirmar el borrado de cuentas (excepto la cuenta administradora activa), empleados, pacientes, citas, facturas, gastos, pagos al equipo, recordatorios e historial. El catálogo de servicios y precios se conserva. Las contraseñas no se incluyen en el PDF. El borrado es permanente, así que guarda el respaldo en un lugar seguro antes de confirmarlo.
