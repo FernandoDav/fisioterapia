@@ -35,12 +35,22 @@
                 type="email"
                 value="admin@fisio.local"
                 required /></label
-            ><label
-              >Contrasena<input
-                id="password"
-                type="password"
-                value="admin123"
-                required /></label
+            ><label class="password-label"
+              >Contrasena
+              <div class="password-input-wrapper" style="position: relative; display: flex; align-items: center;">
+                <input
+                  id="password"
+                  type="password"
+                  value="admin123"
+                  required
+                  style="width: 100%; padding-right: 40px;" />
+                <button
+                  id="togglePassword"
+                  type="button"
+                  aria-label="Mostrar u ocultar contraseña"
+                  style="position: absolute; right: 8px; background: none; border: none; cursor: pointer; color: var(--muted); font-size: 16px; padding: 4px;">👁</button>
+              </div>
+            </label
             ><button class="primary-button full">Entrar al sistema →</button
             ><span class="action-help login-help"
               ><button

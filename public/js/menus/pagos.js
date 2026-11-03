@@ -1,12 +1,13 @@
 shell("Pagos del equipo", "pagos");
 
-let fromDate = "2026-01-01";
-let toDate = "2026-12-31";
+const currentYear = new Date().getFullYear();
+let fromDate = `${currentYear}-01-01`;
+let toDate = `${currentYear}-12-31`;
 let percentage = 40;
 let calculationMode = "total";
 
 function eligibleInvoices(employee) {
-  return db.invoices.filter(
+  return (db.invoices || []).filter(
     (invoice) =>
       invoice.employee === employee &&
       invoice.status === "Pagada" &&
@@ -31,9 +32,15 @@ function employeeCalculation(employeeName) {
   return { invoices, totals, totalBs, paymentBs };
 }
 function exportPayroll(employeeName, markAsPaid = false) {
-  const employee = db.employees.find((item) => item.name === employeeName);
+  const employee = (db.employees || []).find((item) => item.name === employeeName);
   const result = employeeCalculation(employeeName);
   const date = new Date().toISOString().slice(0, 10);
+
+  if (markAsPaid && result.paymentBs <= 0) {
+    alert(`No hay comisiones calculadas para ${employeeName} en este periodo.`);
+    return;
+  }
+
   printReport(
     `Comprobante de pago · ${employeeName}`,
     `Periodo ${fromDate} al ${toDate} · ${date}`,
@@ -52,10 +59,12 @@ function exportPayroll(employeeName, markAsPaid = false) {
     amountBs: Number(result.paymentBs.toFixed(2)),
     date,
   };
+  db.payrollPayments = db.payrollPayments || [];
   db.payrollPayments.push(payment);
+  db.expenses = db.expenses || [];
   db.expenses.push({
     id: Date.now() + 1,
-    concept: `Pago a ${employeeName}`,
+    concept: `Comisión / Pago a ${employeeName}`,
     amountBs: payment.amountBs,
     date,
     payroll: true,
@@ -63,7 +72,7 @@ function exportPayroll(employeeName, markAsPaid = false) {
   logEvent(
     "pagos",
     "pagar_empleado",
-    `Se registro pago de Bs ${payment.amountBs.toFixed(2)} para ${employeeName}.`,
+    `Se registró pago de Bs ${payment.amountBs.toFixed(2)} para ${employeeName}.`,
     payment,
   );
   save();
@@ -74,17 +83,71 @@ function render() {
     .filter((employee) => employee.role !== "Administradora")
     .map((employee) => {
       const result = employeeCalculation(employee.name);
-      return `<tr><td><strong>${employee.name}</strong></td><td>${result.invoices.length}</td><td>Bs ${result.totalBs.toFixed(2)}</td><td><strong>Bs ${result.paymentBs.toFixed(2)}</strong><small>${calculationMode === "invoice" ? "Por factura" : "Sobre total"}</small></td><td>${result.invoices.map((invoice, index) => `<small>${invoice.id} · ${invoice.date} · Bs ${result.totals[index].toFixed(2)}</small>`).join("") || "<small>Sin facturas en el periodo</small>"}</td><td><button class="table-action payroll-pdf" data-employee="${employee.name}">PDF</button><button class="table-action payroll-paid" data-employee="${employee.name}">Marcar pagado</button></td></tr>`;
+      return `<tr>
+        <td><strong>${employee.name}</strong></td>
+        <td>${result.invoices.length}</td>
+        <td>Bs ${result.totalBs.toFixed(2)}</td>
+        <td><strong>Bs ${result.paymentBs.toFixed(2)}</strong><small>${calculationMode === "invoice" ? "Por factura" : "Sobre total"}</small></td>
+        <td>${result.invoices.map((invoice, index) => `<small>${invoice.id} · ${invoice.date} · Bs ${result.totals[index].toFixed(2)}</small>`).join("") || "<small>Sin facturas en el periodo</small>"}</td>
+        <td>
+          <button class="table-action payroll-pdf" data-employee="${employee.name}">PDF</button>
+          <button class="table-action payroll-paid" data-employee="${employee.name}" ${result.paymentBs <= 0 ? "disabled" : ""}>Marcar pagado</button>
+        </td>
+      </tr>`;
     })
     .join("");
-  document.querySelector("#menuContent").innerHTML =
-    `<div class="content-heading"><div><p class="eyebrow">ADMINISTRACION</p><h2>Pagos del equipo</h2><p>Calcula, reporta y registra pagos usando facturas pagadas.</p></div></div><section class="panel payment-filters"><label>Desde<input id="fromDate" type="date" value="${fromDate}"></label><label>Hasta<input id="toDate" type="date" value="${toDate}"></label><label>Porcentaje a pagar (%)<input id="percentage" type="number" min="0" max="100" step="0.01" value="${percentage}"></label><label>Aplicar porcentaje<select id="calculationMode"><option value="total" ${calculationMode === "total" ? "selected" : ""}>Al total de facturas</option><option value="invoice" ${calculationMode === "invoice" ? "selected" : ""}>A cada factura</option></select></label><button id="applyFilters" class="primary-button">Calcular pagos</button></section><section class="panel table-panel"><div class="panel-title"><div><h3>Comisiones del periodo</h3><p>Los pagos registrados se descuentan como gastos en estadísticas.</p></div><span class="date-pill">${fromDate} → ${toDate} · ${percentage}%</span></div><table><thead><tr><th>Empleado</th><th>Facturas pagadas</th><th>Total Bs</th><th>Pago Bs</th><th>Facturas incluidas</th><th>Reportes</th></tr></thead><tbody>${rows}</tbody></table></section>`;
+
+  document.querySelector("#menuContent").innerHTML = `
+    <div class="content-heading">
+      <div>
+        <p class="eyebrow">ADMINISTRACION</p>
+        <h2>Pagos del equipo</h2>
+        <p>Calcula, reporta y registra pagos usando facturas pagadas.</p>
+      </div>
+    </div>
+    <section class="panel payment-filters">
+      <label>Desde<input id="fromDate" type="date" value="${fromDate}"></label>
+      <label>Hasta<input id="toDate" type="date" value="${toDate}"></label>
+      <label>Porcentaje a pagar (%)<input id="percentage" type="number" min="0" max="100" step="0.01" value="${percentage}"></label>
+      <label>Aplicar porcentaje
+        <select id="calculationMode">
+          <option value="total" ${calculationMode === "total" ? "selected" : ""}>Al total de facturas</option>
+          <option value="invoice" ${calculationMode === "invoice" ? "selected" : ""}>A cada factura</option>
+        </select>
+      </label>
+      <button id="applyFilters" class="primary-button">Calcular pagos</button>
+    </section>
+    <section class="panel table-panel">
+      <div class="panel-title">
+        <div>
+          <h3>Comisiones del periodo</h3>
+          <p>Los pagos registrados se descuentan como gastos en estadísticas.</p>
+        </div>
+        <span class="date-pill">${fromDate} → ${toDate} · ${percentage}%</span>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Empleado</th>
+            <th>Facturas pagadas</th>
+            <th>Total Bs</th>
+            <th>Pago Bs</th>
+            <th>Facturas incluidas</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows || '<tr><td colspan="6" class="empty">No hay empleados registrados.</td></tr>'}
+        </tbody>
+      </table>
+    </section>`;
+
   document.querySelector("#applyFilters").onclick = () => {
     const nextFrom = document.querySelector("#fromDate").value;
     const nextTo = document.querySelector("#toDate").value;
     const nextPercentage = Number(document.querySelector("#percentage").value);
     if (!nextFrom || !nextTo || nextFrom > nextTo)
-      return alert("Selecciona un rango de fechas valido.");
+      return alert("Selecciona un rango de fechas válido.");
     if (nextPercentage < 0 || nextPercentage > 100)
       return alert("El porcentaje debe estar entre 0 y 100.");
     fromDate = nextFrom;
@@ -99,22 +162,22 @@ function render() {
     );
     render();
   };
-  document
-    .querySelectorAll(".payroll-pdf")
-    .forEach(
-      (button) =>
-        (button.onclick = () => exportPayroll(button.dataset.employee)),
-    );
-  document.querySelectorAll(".payroll-paid").forEach(
-    (button) =>
-      (button.onclick = () => {
-        if (
-          confirm(
-            `¿Registrar como pagado el monto calculado para ${button.dataset.employee}?`,
-          )
+
+  document.querySelectorAll(".payroll-pdf").forEach((button) => {
+    button.onclick = () => exportPayroll(button.dataset.employee);
+  });
+
+  document.querySelectorAll(".payroll-paid").forEach((button) => {
+    button.onclick = () => {
+      if (
+        confirm(
+          `¿Registrar como pagado el monto calculado para ${button.dataset.employee}? Se creará un registro de gasto en estadísticas.`,
         )
-          exportPayroll(button.dataset.employee, true);
-      }),
-  );
+      ) {
+        exportPayroll(button.dataset.employee, true);
+      }
+    };
+  });
 }
+
 render();

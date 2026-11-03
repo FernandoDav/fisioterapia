@@ -274,10 +274,11 @@ function shell(title, active) {
     )
     .join(
       "",
-    )}</nav></aside><main class="main-content"><header class="topbar"><div class="topbar-leading"><button id="menuToggle" class="menu-toggle" type="button" aria-expanded="false" aria-label="Mostrar menus">☰ <span>Menus</span></button><button class="logout topbar-logout" type="button" onclick="localStorage.removeItem('fisioRole');localStorage.removeItem('fisioUser');location.href='login.html'">↪ Cerrar sesion</button></div><div class="topbar-heading"><p class="eyebrow">GESTION CLINICA</p><h1>${title}</h1></div><div class="topbar-actions"><a class="notification-button" href="recordatorios.html">♧ <b>${(db.notes || []).length}</b></a></div></header><main id="menuContent" class="content-area"></main></main></div>`;
+    )}</nav></aside><main class="main-content"><header class="topbar"><div class="topbar-leading"><button id="menuToggle" class="menu-toggle" type="button" aria-expanded="false" aria-label="Mostrar menus">☰ <span>Menus</span></button><button class="logout topbar-logout" type="button" onclick="localStorage.removeItem('fisioRole');localStorage.removeItem('fisioUser');location.href='login.html'">↪ Cerrar sesion</button></div><div class="topbar-heading"><p class="eyebrow">GESTION CLINICA</p><h1>${title}</h1></div><div class="topbar-actions"><a class="notification-button" href="recordatorios.html" title="Recordatorios pendientes">♧ <b>${(db.notes || []).filter((n) => !n.done).length}</b></a></div></header><main id="menuContent" class="content-area"></main></main></div>`;
   const navigation = document.querySelector(".sidebar nav");
   navigation.id = "menuNavigation";
-  document.querySelector("#menuToggle").onclick = () => {
+  document.querySelector("#menuToggle").onclick = (e) => {
+    e.stopPropagation();
     const sidebar = document.querySelector(".sidebar");
     const open = sidebar.classList.toggle("menu-open");
     sidebar.classList.toggle("open", open);
@@ -285,6 +286,31 @@ function shell(title, active) {
       .querySelector("#menuToggle")
       .setAttribute("aria-expanded", String(open));
   };
+  if (!document.body.dataset.listenersInstalled) {
+    document.body.dataset.listenersInstalled = "true";
+    document.addEventListener("click", (e) => {
+      const sidebar = document.querySelector(".sidebar");
+      const menuToggle = document.querySelector("#menuToggle");
+      if (sidebar && sidebar.classList.contains("menu-open")) {
+        if (!sidebar.contains(e.target) && (!menuToggle || !menuToggle.contains(e.target))) {
+          sidebar.classList.remove("menu-open", "open");
+          menuToggle?.setAttribute("aria-expanded", "false");
+        }
+      }
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        const sidebar = document.querySelector(".sidebar");
+        const menuToggle = document.querySelector("#menuToggle");
+        if (sidebar && sidebar.classList.contains("menu-open")) {
+          sidebar.classList.remove("menu-open", "open");
+          menuToggle?.setAttribute("aria-expanded", "false");
+        }
+        const lastModal = document.querySelector(".entry-modal:last-child");
+        if (lastModal) lastModal.remove();
+      }
+    });
+  }
   installButtonHelp();
   applyManagementPermissions();
 }
@@ -325,9 +351,20 @@ function installButtonHelp() {
     if (
       button.dataset.helpReady ||
       button.classList.contains("info-button") ||
-      button.classList.contains("close")
+      button.classList.contains("close") ||
+      button.closest(".calc, .calendar, table, .stats-tabs, .history-filters, .record-list, .topbar-leading, .date-pill, .agenda-filters, .calendar-title") ||
+      button.dataset.key ||
+      button.dataset.calc ||
+      button.classList.contains("table-action") ||
+      button.classList.contains("delete-note") ||
+      button.classList.contains("status") ||
+      button.classList.contains("filter-button") ||
+      button.classList.contains("person-filter")
     )
       return;
+    const label = button.textContent.trim().replace(/\s+/g, " ");
+    const description = describeButton(button);
+    if (!description) return;
     button.dataset.helpReady = "true";
     const wrapper = document.createElement("span");
     wrapper.className = "action-help";
@@ -337,12 +374,13 @@ function installButtonHelp() {
     help.textContent = "!";
     help.setAttribute(
       "aria-label",
-      `Informacion sobre ${button.textContent.trim()}`,
+      `Informacion sobre ${label}`,
     );
     const message = document.createElement("span");
     message.className = "action-help-message";
-    message.textContent = describeButton(button);
-    help.onclick = () => {
+    message.textContent = description;
+    help.onclick = (e) => {
+      e.stopPropagation();
       message.hidden = !message.hidden;
     };
     button.parentNode.insertBefore(wrapper, button);
@@ -351,7 +389,7 @@ function installButtonHelp() {
   };
   const scan = () =>
     document
-      .querySelectorAll(".app-shell button, .entry-modal button")
+      .querySelectorAll(".content-heading button.primary-button, .invoice-actions button, .reset-actions button")
       .forEach(addHelp);
   scan();
   new MutationObserver(scan).observe(document.body, {
@@ -363,20 +401,17 @@ function describeButton(button) {
   const label = button.textContent.trim().replace(/\s+/g, " ");
   const descriptions = {
     "+ Registrar paciente":
-      "Abre el formulario para registrar un nuevo paciente.",
-    "+ Nueva factura": "Abre el formulario para crear una factura.",
-    "+ Nueva cita": "Abre el formulario para agendar una cita.",
-    "+ Agregar empleado": "Abre el formulario para agregar un empleado.",
+      "Abre el formulario para registrar un nuevo paciente en el sistema.",
+    "+ Nueva factura": "Abre el formulario para crear y calcular una factura.",
+    "+ Nueva cita": "Abre el formulario para agendar una cita en la agenda.",
+    "+ Agregar empleado": "Abre el formulario para dar de alta a un empleado.",
     "+ Nueva nota": "Abre el formulario para programar un recordatorio.",
-    Editar: "Permite modificar los datos del servicio.",
-    Eliminar: "Elimina este servicio del catalogo.",
-    "Marcar lista": "Marca el recordatorio como completado.",
-    "×": "Elimina este recordatorio. La acción queda registrada en el historial.",
+    "+ Agregar servicio": "Abre el formulario para registrar un nuevo servicio en el catálogo.",
+    "Generar respaldo PDF": "Genera y abre una vista imprimible para guardar el respaldo completo en PDF.",
+    "Borrar datos respaldados": "Reinicia los datos operativos tras haber guardado el respaldo en PDF.",
+    "Generar PDF": "Descarga o imprime un reporte en formato PDF.",
   };
-  return (
-    descriptions[label] ||
-    `Muestra o ejecuta la accion: ${label || "esta opcion"}.`
-  );
+  return descriptions[label] || null;
 }
 function formCard(title, fields, collection, onDone) {
   const wrapper = document.createElement("section");
@@ -396,13 +431,44 @@ function formCard(title, fields, collection, onDone) {
     }
     
     // Validaciones específicas por colección
-    if (collection === "services" &&
-        (!Number.isFinite(Number(value.price)) || Number(value.price) <= 0)) {
-      showFormError(wrapper, "El precio debe ser mayor que cero.");
-      return;
+    if (collection === "services") {
+      const price = Number(value.price);
+      if (!Number.isFinite(price) || price <= 0) {
+        showFormError(wrapper, "El precio debe ser un número mayor que cero.");
+        return;
+      }
+      value.price = price;
+      value.duration = Number(value.duration || 50);
+      value.active = true;
+    }
+
+    if (collection === "expenses") {
+      const amountBs = Number(value.amountBs);
+      if (!Number.isFinite(amountBs) || amountBs <= 0) {
+        showFormError(wrapper, "El monto del gasto debe ser mayor que cero.");
+        return;
+      }
+      value.amountBs = amountBs;
+    }
+
+    if (collection === "notes") {
+      value.done = false;
+    }
+
+    if (collection === "patients") {
+      if (!value.name && (value.firstNames || value.lastNames)) {
+        value.name = `${value.firstNames || ""} ${value.lastNames || ""}`.trim();
+      }
+      if (!value.status) value.status = "Primera visita";
     }
     
     if (collection === "employees") {
+      const emailLower = (value.email || "").trim().toLowerCase();
+      if ((db.users || []).some(u => (u.email || "").toLowerCase() === emailLower)) {
+        showFormError(wrapper, "Ya existe un usuario registrado con este correo.");
+        return;
+      }
+
       // Validación de contraseña
       if (value.password !== value.confirmPassword) {
         showFormError(wrapper, "Las contraseñas no coinciden.");
@@ -450,7 +516,7 @@ function formCard(title, fields, collection, onDone) {
           role: value.role,
           hireDate: value.hireDate,
           contractType: value.contractType,
-          baseSalary: value.baseSalary,
+          baseSalary: value.baseSalary ? Number(value.baseSalary) : 0,
           currency: value.currency,
           bankName: value.bankName,
           accountNumber: value.accountNumber,
@@ -464,7 +530,7 @@ function formCard(title, fields, collection, onDone) {
     if (collection === "invoices") {
       value.id = `FAC-${1050 + db.invoices.length}`;
       value.amount = Number(value.amount);
-      value.status = "Pagada";
+      value.status = value.status || "Pagada";
     }
     
     db[collection] = db[collection] || [];
@@ -472,7 +538,7 @@ function formCard(title, fields, collection, onDone) {
     logEvent(
       collection === "employees" ? "usuario" : collection,
       "crear",
-      `Se registro ${collection === "employees" ? "el usuario " + value.name : "un nuevo " + collection.slice(0, -1)}.`,
+      `Se registro ${collection === "employees" ? "el usuario " + value.name : "un nuevo registro en " + collection}.`,
       value,
     );
     save();

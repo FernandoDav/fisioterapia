@@ -5,6 +5,22 @@ document.querySelector(".login-help .info-button")?.addEventListener("click", ()
   if (helpMessage) helpMessage.hidden = !helpMessage.hidden;
 });
 
+const togglePasswordBtn = document.querySelector("#togglePassword");
+if (togglePasswordBtn) {
+  togglePasswordBtn.onclick = () => {
+    const passwordInput = document.querySelector("#password");
+    if (passwordInput) {
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      togglePasswordBtn.textContent = isPassword ? "🙈" : "👁";
+      togglePasswordBtn.setAttribute(
+        "aria-label",
+        isPassword ? "Ocultar contraseña" : "Mostrar contraseña",
+      );
+    }
+  };
+}
+
 const loginForm = document.querySelector("#loginForm");
 if (loginForm) {
   loginForm.onsubmit = (event) => {

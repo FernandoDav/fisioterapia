@@ -7,84 +7,163 @@ function render() {
       <div>
         <p class="eyebrow">ADMINISTRACION</p>
         <h2>Precios y servicios</h2>
-        <p>Administra el catalogo que se ofrece a los pacientes.</p>
+        <p>Administra el catálogo que se ofrece a los pacientes.</p>
       </div>
       <button id="newService" class="primary-button">+ Agregar servicio</button>
     </div>
     <div class="service-summary">
-      <div class="kpi"><span>Servicios activos</span><strong>${services.filter((service) => service.active).length}</strong><i>Disponibles para facturar</i></div>
-      <div class="kpi total-price-kpi"><span>Valor total del catalogo <button id="totalInfo" class="info-button" type="button" aria-label="Como se calcula el valor total del catalogo">!</button></span><strong>${money(services.reduce((sum, service) => sum + Number(service.price), 0))}</strong><i>Sumatoria de precios publicados</i><p id="totalExplanation" class="calculation-message" hidden>Se suman los precios de todos los servicios registrados para obtener el valor total del catalogo.</p></div>
-      <div class="kpi"><span>Duracion promedio</span><strong>${Math.round(services.reduce((sum, service) => sum + Number(service.duration), 0) / (services.length || 1))} min</strong><i>Tiempo por sesion</i></div>
+      <div class="kpi">
+        <span>Servicios activos</span>
+        <strong>${services.filter((service) => service.active !== false).length}</strong>
+        <i>Disponibles para facturar</i>
+      </div>
+      <div class="kpi total-price-kpi">
+        <span>Valor total del catálogo <button id="totalInfo" class="info-button" type="button" aria-label="Cómo se calcula el valor total del catálogo">!</button></span>
+        <strong>${money(services.reduce((sum, service) => sum + Number(service.price || 0), 0))}</strong>
+        <i>Sumatoria de precios publicados</i>
+        <p id="totalExplanation" class="calculation-message" hidden>Se suman los precios de todos los servicios registrados para obtener el valor total del catálogo.</p>
+      </div>
+      <div class="kpi">
+        <span>Duración promedio</span>
+        <strong>${Math.round(services.reduce((sum, service) => sum + Number(service.duration || 0), 0) / (services.length || 1))} min</strong>
+        <i>Tiempo por sesión</i>
+      </div>
     </div>
     <section class="panel table-panel">
-      <div class="panel-title"><div><h3>Catalogo de servicios</h3><p>Estos precios apareceran al crear una factura.</p></div><select id="serviceFilter"><option value="all">Todos</option><option value="active">Activos</option><option value="inactive">Inactivos</option></select></div>
-      <table><thead><tr><th>Servicio</th><th>Categoria</th><th>Duracion</th><th>Precio</th><th>Estado</th><th>Acciones</th></tr></thead><tbody>
-        ${services.map((service) => `<tr data-active="${service.active}"><td><strong>${service.name}</strong></td><td>${service.category}</td><td>${service.duration} min</td><td><strong>${money(service.price)}</strong></td><td><button class="status action-status" data-id="${service.id}">${service.active ? "Activo" : "Inactivo"}</button></td><td><button class="table-action edit-service" data-id="${service.id}">Editar</button><button class="table-action delete-service" data-id="${service.id}">Eliminar</button></td></tr>`).join("")}
-      </tbody></table>
+      <div class="panel-title">
+        <div>
+          <h3>Catálogo de servicios</h3>
+          <p>Estos precios aparecerán al crear una factura.</p>
+        </div>
+        <select id="serviceFilter">
+          <option value="all">Todos</option>
+          <option value="active">Activos</option>
+          <option value="inactive">Inactivos</option>
+        </select>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Servicio</th>
+            <th>Categoría</th>
+            <th>Duración</th>
+            <th>Precio</th>
+            <th>Estado</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${services
+            .map(
+              (service) => `<tr data-active="${service.active !== false}">
+              <td><strong>${service.name}</strong></td>
+              <td>${service.category || "General"}</td>
+              <td>${service.duration || 50} min</td>
+              <td><strong>${money(service.price)}</strong></td>
+              <td><button class="status action-status" data-id="${service.id}">${service.active !== false ? "Activo" : "Inactivo"}</button></td>
+              <td>
+                <button class="table-action edit-service" data-id="${service.id}">Editar</button>
+                <button class="table-action delete-service" data-id="${service.id}">Eliminar</button>
+              </td>
+            </tr>`,
+            )
+            .join("")}
+        </tbody>
+      </table>
     </section>`;
+
   document.querySelector("#newService").onclick = () => openServiceForm();
+
   document.querySelector("#totalInfo").onclick = () => {
     const message = document.querySelector("#totalExplanation");
-    message.hidden = !message.hidden;
+    if (message) message.hidden = !message.hidden;
   };
+
   document.querySelector("#serviceFilter").onchange = (event) =>
     document.querySelectorAll("[data-active]").forEach((row) => {
       row.hidden =
         event.target.value !== "all" &&
         String(event.target.value === "active") !== row.dataset.active;
     });
-  document.querySelectorAll(".action-status").forEach(
-    (button) =>
-      (button.onclick = () => {
-        const service = services.find(
-          (item) => item.id === Number(button.dataset.id),
-        );
-        service.active = !service.active;
-        logEvent(
-          "services",
-          service.active ? "activar" : "desactivar",
-          `Se ${service.active ? "activo" : "desactivo"} el servicio ${service.name}.`,
-          service,
-        );
-        save();
-        render();
-      }),
-  );
-  document.querySelectorAll(".delete-service").forEach(
-    (button) =>
-      (button.onclick = () => {
-        db.services = services.filter(
-          (item) => item.id !== Number(button.dataset.id),
-        );
-        logEvent(
-          "services",
-          "eliminar",
-          `Se elimino el servicio ${services.find((item) => item.id === Number(button.dataset.id))?.name || "sin nombre"}.`,
-          { id: button.dataset.id },
-        );
-        save();
-        render();
-      }),
-  );
-  document
-    .querySelectorAll(".edit-service")
-    .forEach(
-      (button) =>
-        (button.onclick = () =>
-          openServiceForm(
-            services.find((item) => item.id === Number(button.dataset.id)),
-          )),
-    );
+
+  document.querySelectorAll(".action-status").forEach((button) => {
+    button.onclick = () => {
+      const service = services.find(
+        (item) => String(item.id) === String(button.dataset.id),
+      );
+      if (!service) return;
+      service.active = service.active === false ? true : false;
+      logEvent(
+        "services",
+        service.active ? "activar" : "desactivar",
+        `Se ${service.active ? "activó" : "desactivó"} el servicio ${service.name}.`,
+        service,
+      );
+      save();
+      render();
+    };
+  });
+
+  document.querySelectorAll(".delete-service").forEach((button) => {
+    button.onclick = () => {
+      const service = services.find(
+        (item) => String(item.id) === String(button.dataset.id),
+      );
+      if (
+        !service ||
+        !confirm(`¿Eliminar el servicio "${service.name}" del catálogo?`)
+      ) {
+        return;
+      }
+      db.services = (db.services || []).filter(
+        (item) => String(item.id) !== String(button.dataset.id),
+      );
+      logEvent(
+        "services",
+        "eliminar",
+        `Se eliminó el servicio ${service.name}.`,
+        service,
+      );
+      save();
+      render();
+    };
+  });
+
+  document.querySelectorAll(".edit-service").forEach((button) => {
+    button.onclick = () =>
+      openServiceForm(
+        services.find((item) => String(item.id) === String(button.dataset.id)),
+      );
+  });
 }
 
 function openServiceForm(service = null) {
-  const fields = `<label>Nombre del servicio<input name="name" value="${service?.name || ""}" required></label><label>Categoria<select name="category"><option ${service?.category === "Evaluacion" ? "selected" : ""}>Evaluacion</option><option ${service?.category === "Tratamiento" ? "selected" : ""}>Tratamiento</option><option ${service?.category === "Complementario" ? "selected" : ""}>Complementario</option></select></label><label>Duracion (minutos)<input name="duration" type="number" min="5" value="${service?.duration || 50}" required></label><label>Precio<input name="price" type="number" min="0.01" step="0.01" value="${service?.price || ""}" required></label>`;
+  const fields = `
+    <label>Nombre del servicio
+      <input name="name" value="${service?.name || ""}" required>
+    </label>
+    <label>Categoría
+      <select name="category">
+        <option ${service?.category === "Evaluacion" ? "selected" : ""}>Evaluacion</option>
+        <option ${service?.category === "Tratamiento" ? "selected" : ""}>Tratamiento</option>
+        <option ${service?.category === "Complementario" ? "selected" : ""}>Complementario</option>
+      </select>
+    </label>
+    <label>Duración (minutos)
+      <input name="duration" type="number" min="5" value="${service?.duration || 50}" required>
+    </label>
+    <label>Precio en USD
+      <input name="price" type="number" min="0.01" step="0.01" value="${service?.price || ""}" required>
+    </label>
+  `;
+
   formCard(
     service ? "Editar servicio" : "Agregar servicio",
     fields,
     "services",
     () => render(),
   );
+
   if (service) {
     const modal = document.querySelector(".entry-modal:last-child");
     modal.querySelector("form").onsubmit = (event) => {
@@ -102,7 +181,7 @@ function openServiceForm(service = null) {
       logEvent(
         "services",
         "editar",
-        `Se actualizo el servicio ${service.name}.`,
+        `Se actualizó el servicio ${service.name}.`,
         service,
       );
       modal.remove();
@@ -110,4 +189,5 @@ function openServiceForm(service = null) {
     };
   }
 }
+
 render();
