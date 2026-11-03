@@ -142,13 +142,17 @@ function render() {
   });
   document.querySelectorAll(".calendar-slot.occupied").forEach((slot) => {
     slot.onclick = () => {
+      const idEl = slot.querySelector("[data-id]");
+      if (!idEl) return;
       const appointment = db.appointments.find(
         (item) =>
-          item.id === Number(slot.querySelector("[data-id]").dataset.id),
+          item.id === Number(idEl.dataset.id),
       );
-      alert(
-        `${appointment.patient}\n${appointment.employee}\n${appointment.service || "Servicio no especificado"}\n${appointment.date} a las ${appointment.time}`,
-      );
+      if (appointment) {
+        alert(
+          `${appointment.patient}\n${appointment.employee}\n${appointment.service || "Servicio no especificado"}\n${appointment.date} a las ${appointment.time}`,
+        );
+      }
     };
   });
   document.querySelector("#previousWeek").onclick = () => {

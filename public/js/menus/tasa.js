@@ -41,6 +41,7 @@ function _findNumericRec(obj) {
   if (typeof obj !== "object") return _parsePossibleNumber(obj);
   // search known keys first
   const keysPriority = [
+    "promedio",
     "venta",
     "valor",
     "price",
@@ -117,19 +118,21 @@ async function obtenerTasaAuto({
     if (cached) return cached.tasa;
   }
 
-  // 1) Intentar proxy local primero (evita problemas de parseo y cambios en BCV)
-  try {
-    const res = await fetch("http://localhost:2530/api/bcv-tasa");
-    if (res.ok) {
-      const j = await res.json();
-      const v = _findNumericRec(j);
-      if (v !== null) {
-        _setTasaCache(v, "proxy-local");
-        return v;
+  // 1) Intentar proxy local si no estamos en HTTPS
+  if (typeof window !== "undefined" && window.location && window.location.protocol !== "https:") {
+    try {
+      const res = await fetch("http://localhost:2530/api/bcv-tasa");
+      if (res.ok) {
+        const j = await res.json();
+        const v = _findNumericRec(j);
+        if (v !== null) {
+          _setTasaCache(v, "proxy-local");
+          return v;
+        }
       }
+    } catch (e) {
+      // Silenciar error y usar fallback
     }
-  } catch (e) {
-    // Silenciar error y usar fallback
   }
 
   // 2) Intentar DolarApi.com con parsing robusto
@@ -143,16 +146,15 @@ async function obtenerTasaAuto({
     // continue
   }
 
-  // 3) Fallback a exchangerate.host (soporta CORS)
+  // 3) Fallback a open.er-api.com (soporta CORS, sin API key requerida)
   try {
-    const res2 = await fetch(
-      "https://api.exchangerate.host/latest?base=USD&symbols=VES",
-    );
+    const res2 = await fetch("https://open.er-api.com/v6/latest/USD");
     if (res2.ok) {
       const j2 = await res2.json();
       if (j2 && j2.rates && j2.rates.VES) {
-        _setTasaCache(Number(j2.rates.VES), "exchangerate.host");
-        return Number(j2.rates.VES);
+        const rateVes = Number(j2.rates.VES);
+        _setTasaCache(rateVes, "open-er-api");
+        return rateVes;
       }
     }
   } catch (e) {

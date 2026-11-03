@@ -207,8 +207,8 @@ function openUserEditor(user) {
       permissionMenus.map((menu) => [
         menu,
         {
-          view: event.target.querySelector(`[name="view-${menu}"]`).checked,
-          manage: event.target.querySelector(`[name="manage-${menu}"]`).checked,
+          view: event.target.querySelector(`[name="view-${menu}"]`)?.checked || false,
+          manage: event.target.querySelector(`[name="manage-${menu}"]`)?.checked || false,
         },
       ]),
     );

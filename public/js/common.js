@@ -120,8 +120,13 @@ const seed = {
 const db = JSON.parse(
   localStorage.getItem("fisioData") || JSON.stringify(seed),
 );
-db.services = db.services || seed.services;
-db.users = db.users || seed.users;
+db.patients = (db.patients && db.patients.length) ? db.patients : (seed.patients || []);
+db.invoices = (db.invoices && db.invoices.length) ? db.invoices : (seed.invoices || []);
+db.appointments = (db.appointments && db.appointments.length) ? db.appointments : (seed.appointments || []);
+db.notes = (db.notes && db.notes.length) ? db.notes : (seed.notes || []);
+db.employees = (db.employees && db.employees.length) ? db.employees : (seed.employees || []);
+db.services = (db.services && db.services.length) ? db.services : (seed.services || []);
+db.users = (db.users && db.users.length) ? db.users : (seed.users || []);
 db.auditLog = db.auditLog || [];
 db.expenses = db.expenses || [];
 db.payrollPayments = db.payrollPayments || [];
@@ -150,7 +155,7 @@ function printReport(title, subtitle, sections) {
     return;
   }
   reportWindow.document.write(
-    `<!doctype html><html lang="es"><head><meta charset="UTF-8"><title>${title}</title><style>body{font-family:Arial,sans-serif;color:#075b9d;padding:36px}header{display:flex;align-items:center;gap:16px;border-bottom:2px solid #13bfc2;padding-bottom:16px;margin-bottom:24px}header img{width:86px;height:86px;object-fit:contain}h1{margin:0 0 5px}h2{color:#126c9f;border-bottom:1px solid #cfe9ec;padding-bottom:6px}p,td,th{font-size:12px}table{width:100%;border-collapse:collapse;margin:12px 0 24px}td,th{border-bottom:1px solid #dbeaec;padding:9px;text-align:left}th{background:#dff8f7;color:#075b9d}.report-meta{color:#668894;margin-bottom:25px}.total{font-size:18px;font-weight:bold;color:#075b9d}</style></head><body><header><img src="${new URL("public/css/imagenes/IMG_3629.PNG", window.location.href).href}" alt="Faz Castillo Fisioterapia"><div><h1>${title}</h1><p class="report-meta">${subtitle}</p></div></header>${sections.join("")}<script>window.onload=()=>{window.print()}<\/script></body></html>`,
+    `<!doctype html><html lang="es"><head><meta charset="UTF-8"><title>${title}</title><style>body{font-family:Arial,sans-serif;color:#075b9d;padding:36px}header{display:flex;align-items:center;gap:16px;border-bottom:2px solid #13bfc2;padding-bottom:16px;margin-bottom:24px}header img{width:86px;height:86px;object-fit:contain}h1{margin:0 0 5px}h2{color:#126c9f;border-bottom:1px solid #cfe9ec;padding-bottom:6px}p,td,th{font-size:12px}table{width:100%;border-collapse:collapse;margin:12px 0 24px}td,th{border-bottom:1px solid #dbeaec;padding:9px;text-align:left}th{background:#dff8f7;color:#075b9d}.report-meta{color:#668894;margin-bottom:25px}.total{font-size:18px;font-weight:bold;color:#075b9d}</style></head><body><header><img src="${new URL("../public/css/imagenes/IMG_3629.PNG", window.location.href).href}" alt="Faz Castillo Fisioterapia"><div><h1>${title}</h1><p class="report-meta">${subtitle}</p></div></header>${sections.join("")}<script>window.onload=()=>{window.print()}<\/script></body></html>`,
   );
   reportWindow.document.close();
 }
@@ -382,7 +387,12 @@ function formCard(title, fields, collection, onDone) {
     .forEach((button) => (button.onclick = () => wrapper.remove()));
   wrapper.querySelector("form").onsubmit = (event) => {
     event.preventDefault();
-    const value = Object.fromEntries(new FormData(event.target));
+    const formData = new FormData(event.target);
+    const value = Object.fromEntries(formData);
+    const multiBackgrounds = formData.getAll("medicalBackground");
+    if (multiBackgrounds.length) {
+      value.medicalBackground = multiBackgrounds;
+    }
     
     // Validaciones específicas por colección
     if (collection === "services" &&

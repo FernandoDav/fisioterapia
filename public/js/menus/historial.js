@@ -95,7 +95,7 @@ function render() {
   const events = (db.auditLog || []).filter(
     (event) =>
       (activeType === "todos" || event.type === activeType) &&
-      `${event.description} ${event.user} ${JSON.stringify(event.data)}`
+      `${event.description || ""} ${event.user || ""} ${event.data ? JSON.stringify(event.data) : ""}`
         .toLowerCase()
         .includes(query),
   );
@@ -136,7 +136,7 @@ function render() {
             )
             .join("") || '<div class="empty-state"><div style="font-size: 32px; color: var(--line);">💸</div><p style="color: var(--muted); font-size: 12px; margin-top: 8px;">No hay facturas relacionadas</p></div>'
         : '<p class="empty">Selecciona una persona.</p>'
-    }</section><section><h4>Actividad relacionada</h4>${eventCards(record ? (db.auditLog || []).filter((event) => `${event.description} ${JSON.stringify(event.data)}`.toLowerCase().includes(record.name.toLowerCase())) : [])}</section></div></section></div><section class="panel history-panel"><div class="history-heading"><h3>Actividad general</h3><small>Sin acciones de eliminación</small></div>${eventCards(events)}</section>`;
+    }</section><section><h4>Actividad relacionada</h4>${eventCards(record ? (db.auditLog || []).filter((event) => `${event.description || ""} ${event.data ? JSON.stringify(event.data) : ""}`.toLowerCase().includes(record.name.toLowerCase())) : [])}</section></div></section></div><section class="panel history-panel"><div class="history-heading"><h3>Actividad general</h3><small>Sin acciones de eliminación</small></div>${eventCards(events)}</section>`;
   document.querySelector("#historySearch").oninput = render;
   document.querySelectorAll("[data-type]").forEach(
     (button) =>
